@@ -1,79 +1,56 @@
-import Validator from '../regular'; 
+import Validator from '../regular';
 
-test('Проверка имени пользователя. Имя корректное', () => { 
-    const nickName = 'Alex-12_D-4-M'; 
-    const validateNickName = new Validator(nickName); 
-    expect(validateNickName.validateUserName()).toBe(nickName); 
-}); 
+test('Тест Ника', () => {
+  const received = Validator.validateUsername('polly');
+  expect(received).toBeTruthy();
+});
 
-test('Проверка имени пользователя. Имя содержит не разрешенные символы', () => { 
-    expect(() => { 
-        const nickName = 'Alex@-12_D-4-M'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Разрешены: только латинские буквы, символы тире -, подчёркивания _ и цифры (0-9)', 
-    ), 
-    ); 
-}); 
+test('Ник из заглавных букв', () => {
+  const received = Validator.validateUsername('POLLY');
+  expect(received).toBeTruthy();
+});
 
-test('Проверка имени пользователя. Имя содержит цифру в начале', () => { 
-    expect(() => { 
-        const nickName = '1Alex-12_D-4-M'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Имя пользоватебя  начинаеться и заканчивеаться цифрами, символами подчёркивания или тире.', 
-    ), 
-    ); 
-}); 
+test('Ник из цифр', () => {
+  const received = Validator.validateUsername('P254ly');
+  expect(received).toBeTruthy();
+});
 
-test('Проверка имени пользователя. Имя содержит цифру в конце', () => { 
-    expect(() => { 
-        const nickName = 'Alex-12_D-4-M_1'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Имя пользоватебя  начинаеться и заканчивеаться цифрами, символами подчёркивания или тире.', 
-    ), 
-    ); 
-}); 
+test('Ник с нижнем подчеркиванием', () => {
+  const received = Validator.validateUsername('p_olly');
+  expect(received).toBeTruthy();
+});
 
-test('Проверка имени пользователя. Имя содержит тире в начале', () => { 
-    expect(() => { 
-        const nickName = '-Alex-12_D-4-M'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Имя пользоватебя  начинаеться и заканчивеаться цифрами, символами подчёркивания или тире.', 
-    ), 
-    ); 
-}); 
+test('Ник с тире', () => {
+  const received = Validator.validateUsername('po-lly');
+  expect(received).toBeTruthy();
+});
 
-test('Проверка имени пользователя. Имя содержит знак подчеркивания в конце', () => { 
-    expect(() => { 
-        const nickName = 'Alex-12_D-4-M_'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Имя пользоватебя  начинаеться и заканчивеаться цифрами, символами подчёркивания или тире.', 
-    ), 
-    ); 
-}); 
+test('Ник начинается с нижнего подчеркивания', () => {
+  const received = Validator.validateUsername('_polly');
+  expect(received).toBeFalsy();
+});
 
-test('Проверка имени пользователя. Имя содержит более 3 цифр подряд', () => { 
-    expect(() => { 
-        const nickName = 'Alex-12342342_D-4-M'; 
-        const validateNickName = new Validator(nickName); 
-        validateNickName.validateUserName(); 
-    }).toThrowError( 
-    new Error( 
-        'ОШИБКА! Имя содержит подряд более трёх цифр.', 
-    ), 
-    ); 
+test('Ник начинается с тире', () => {
+  const received = Validator.validateUsername('-polly');
+  expect(received).toBeFalsy();
+});
+
+test('Ник заканчивается тире', () => {
+  const received = Validator.validateUsername('polly-');
+  expect(received).toBeFalsy();
+});
+
+test('Ник больше 3 цифр подряд', () => {
+  const received = Validator.validateUsername('po5555lly');
+  expect(received).toBeFalsy();
+});
+
+test('Тест ника если содержит только 1 букву в имени', () => {
+  const received = Validator.validateUsername('Ф');
+  expect(received).toBeFalsy();
+});
+
+test('Тест ника если содержит только 1 цифру в имени', () => {
+  const received = Validator.validateUsername('1');
+  expect(received).toBeFalsy();
 });
